@@ -46,6 +46,7 @@
 
         <div class="panel-body">
             <div class="col-sm-6" id="crop-image" style="height: 800px;"></div>
+            |
             <div class="col-sm-6" id="crop-preview"></div>
         </div>
 
@@ -88,7 +89,7 @@
                     processData: false,
                     contentType: false,
                     success(res) {
-                        console.log(res);
+                        alert(res.msg);
                     },
                     error() {
                         alert('上传失败');

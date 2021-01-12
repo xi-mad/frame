@@ -1,15 +1,18 @@
-from flask import Flask, render_template, request, jsonify
-from setting import mode_pi as mode
 import os
 import uuid
 
 from PIL import Image
+from flask import Flask, render_template, request, jsonify
+
+from setting import mode_dev as mode
 
 is_pi = mode['pi']
 
 if is_pi:
     from waveshare_epd import epd7in5_V2
+    import RPi.GPIO as GPIO
     
+    GPIO.setmode(GPIO.BOARD)
     epd = epd7in5_V2.EPD()
     epd.init()
 
@@ -17,12 +20,12 @@ app = Flask(__name__)
 
 
 def show(img, transpose):
-    epd.Clear()
     _transpose = int(transpose)
     if _transpose != 0:
         img = img.transpose(_transpose)
     img = img.convert(mode='1', dither=Image.FLOYDSTEINBERG)
     if is_pi:
+        epd.Clear()
         img = img.resize((epd.width, epd.height))
         epd.display(epd.getbuffer(img))
         epd.sleep()
@@ -49,7 +52,7 @@ def api_image():
     show(img, transpose)
     
     return jsonify({
-        'code': 0
+        'msg': '上传成功'
     })
 
 
