@@ -88,11 +88,11 @@
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success(res) {
-                        alert(res.msg);
+                    success() {
+                        alert('发布成功');
                     },
                     error() {
-                        alert('上传失败');
+                        alert('发布失败');
                     },
                 });
             });
