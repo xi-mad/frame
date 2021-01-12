@@ -39,10 +39,6 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="threshold">二值化阈值</label>
-                <input type="number" class="form-control" id="threshold" value="0" >
-            </div>
-            <div class="form-group">
                 <button class="btn btn-success btn-sm" id="push">发布</button>
             </div>
 
@@ -50,7 +46,7 @@
 
         <div class="panel-body">
             <div class="col-sm-6" id="crop-image" style="height: 800px;"></div>
-            |
+            |||
             <div class="col-sm-6" id="crop-preview"></div>
         </div>
 
@@ -87,7 +83,6 @@
                 const formData = new FormData();
                 formData.append('image', blob);
                 formData.append('transpose', $('#transpose').val())
-                formData.append('threshold', $('#threshold').val())
 
                 $.ajax('/api/image', {
                     method: 'POST',
