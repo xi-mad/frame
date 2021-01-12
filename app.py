@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from setting import mode_dev as mode
+from setting import mode_pi as mode
 import uuid
 from PIL import Image
 import os
@@ -58,4 +58,4 @@ def video():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
