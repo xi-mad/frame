@@ -10,9 +10,7 @@ is_pi = mode['pi']
 
 if is_pi:
     from waveshare_epd import epd7in5_V2
-    import RPi.GPIO as GPIO
     
-    GPIO.setmode(GPIO.BOARD)
     epd = epd7in5_V2.EPD()
     epd.init()
 
@@ -28,7 +26,6 @@ def show(img, transpose):
         epd.Clear()
         img = img.resize((epd.width, epd.height))
         epd.display(epd.getbuffer(img))
-        epd.sleep()
 
 
 @app.route('/')
