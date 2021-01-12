@@ -17,11 +17,22 @@ if is_pi:
 app = Flask(__name__)
 
 
-def show(img, transpose):
+def show(img, transpose, threshold):
     _transpose = int(transpose)
+    _threshold = int(threshold)
     if _transpose != 0:
         img = img.transpose(_transpose)
-    img = img.convert(mode='1', dither=Image.FLOYDSTEINBERG)
+    img = img.convert('L')
+    if threshold == 0:
+        w, h = img.size
+        pixels = img.load()
+        for x in range(w):
+            for y in range(h):
+                pix = pixels[x, y]
+                pixels[x, y] = 1 if pix > _threshold else 0
+    else:
+        img.convert(mode='1', dither=Image.FLOYDSTEINBERG)
+    
     if is_pi:
         epd.Clear()
         img = img.resize((epd.width, epd.height))
@@ -42,11 +53,12 @@ def image():
 def api_image():
     upload_file = request.files['image']
     transpose = request.form.get('transpose')
+    threshold = request.form.get('threshold')
     filename = os.path.join(mode['image_path'], str(uuid.uuid4()) + '.jpg')
     upload_file.save(filename)
     
     img = Image.open(upload_file.stream)
-    show(img, transpose)
+    show(img, transpose, threshold)
     
     return jsonify({
         'msg': '上传成功'

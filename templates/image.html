@@ -39,6 +39,10 @@
                 </select>
             </div>
             <div class="form-group">
+                <label for="transpose">二值化阈值</label>
+                <input type="number" id="transpose" value="0" >
+            </div>
+            <div class="form-group">
                 <button class="btn btn-success btn-sm" id="push">发布</button>
             </div>
 
@@ -83,6 +87,8 @@
                 const formData = new FormData();
                 formData.append('image', blob);
                 formData.append('transpose', $('#transpose').val())
+                formData.append('threshold', $('#threshold').val())
+
                 $.ajax('/api/image', {
                     method: 'POST',
                     data: formData,
