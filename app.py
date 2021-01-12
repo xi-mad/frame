@@ -23,7 +23,7 @@ def show(img, transpose, threshold):
     if _transpose != 0:
         img = img.transpose(_transpose)
     img = img.convert('L')
-    if threshold == 0:
+    if _threshold != 0:
         w, h = img.size
         pixels = img.load()
         for x in range(w):
