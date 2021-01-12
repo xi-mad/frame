@@ -1,22 +1,24 @@
-from flask import Flask, render_template, request, jsonify
-from setting import mode_dev as mode
-import uuid
-from PIL import Image
 import os
+import uuid
+
+from PIL import Image
+from flask import Flask, render_template, request, jsonify
+
+from setting import mode_dev as mode
 
 is_pi = mode['pi']
 
 if is_pi:
     from waveshare_epd import epd7in5_V2
+    
     epd = epd7in5_V2.EPD()
     epd.init()
-    epd.Clear()
-    
-    
+
 app = Flask(__name__)
 
 
 def show(img, transpose):
+    epd.Clear()
     _transpose = int(transpose)
     if _transpose != 0:
         img = img.transpose(_transpose)
@@ -25,8 +27,8 @@ def show(img, transpose):
         img = img.resize((epd.width, epd.height))
         epd.display(epd.getbuffer(img))
         epd.sleep()
-    
-    
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -43,7 +45,7 @@ def api_image():
     transpose = request.form.get('transpose')
     filename = os.path.join(mode['image_path'], str(uuid.uuid4()) + '.jpg')
     upload_file.save(filename)
-
+    
     img = Image.open(upload_file.stream)
     show(img, transpose)
     
@@ -58,4 +60,4 @@ def video():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
