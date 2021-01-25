@@ -32,6 +32,7 @@ def show(img, transpose):
         img = img.resize((epd.width, epd.height))
         epd.display(epd.getbuffer(img))
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -67,6 +68,16 @@ def api_image_show():
     })
 
 
+@app.route('/api/image/upload', methods=['POST'])
+def api_image_upload():
+    upload_file = request.files['image']
+    filename = os.path.join(mode['image_path'], str(uuid.uuid4()) + '.jpg')
+    upload_file.save(filename)
+    return jsonify({
+        'msg': '上传成功'
+    })
+
+
 def list_images(path):
     files = os.listdir(path)
     return [{'name': file,
@@ -93,6 +104,14 @@ def videos():
 @app.route('/images')
 def images():
     return render_template('images.html')
+
+
+@app.route('/del/image', methods=['POST'])
+def del_image():
+    os.remove(mode['image_path'] + '/' + request.form.get('name'))
+    return jsonify({
+        'msg': '删除成功'
+    })
 
 
 @app.route('/get/image')

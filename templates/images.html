@@ -14,6 +14,7 @@
 
         <div class="row">
             <div class="col-sm-4">
+                <h3>图片设置</h3>
                 <div class="form-group">
                     <label for="transpose">图片是否旋转</label>
                     <select id="transpose" class="form-control">
@@ -24,8 +25,23 @@
                     </select>
                 </div>
             </div>
-        </div>
+            <div class="col-sm-4" style="margin-left: 5%">
+                <h3>上传图片</h3>
+                <div class="row">
+                    <form id="image-form" class="form-group">
+                        <label for="upload-image"> </label>
+                        <input type="file" name="image" accept="image/*"/>
+                    </form>
+                    <div class="form-group">
 
+                        <button class="btn btn-primary btn" id="upload">上传</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <br/>
+        </div>
         <div class="row" id="image-div">
 
         </div>
@@ -43,10 +59,28 @@
                     '          <h5>文件大小: ' + e.size + 'MB</h5>' +
                     '          <h5>修改时间: ' + e.time + '</h5>' +
                     '          <button class="btn btn-primary btn-xs" onclick="show(\'' + e.name + '\')">展示</button>' +
+                    '          <button class="btn btn-danger btn-xs" onclick="del(\'' + e.name + '\')">删除</button>' +
                     '      </div>' +
                     '   </div>' +
                     '</div>');
             })
+        })
+
+        $('#upload').click(function () {
+            const formData = new FormData($('#image-form')[0]);
+            $.ajax('/api/image/upload', {
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success() {
+                    alert('上传成功')
+                    window.location.reload();
+                },
+                error() {
+                },
+            });
+
         })
     })
 
@@ -56,6 +90,15 @@
             transpose: $('#transpose').val()
         }, function (res) {
             alert(res.msg)
+        })
+    }
+
+    function del(name) {
+        $.post('/del/image', {
+            name: name
+        }, function (res) {
+            alert(res.msg)
+            window.location.reload();
         })
     }
 </script>
