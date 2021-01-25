@@ -60,7 +60,7 @@ def api_image():
 @app.route('/api/image/show', methods=['POST'])
 def api_image_show():
     img = Image.open(mode['image_path'] + '/' + request.form.get('name'))
-    show(img, 0)
+    show(img, request.form.get('transpose'))
     
     return jsonify({
         'msg': '发布成功'

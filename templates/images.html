@@ -52,7 +52,8 @@
 
     function show(name) {
         $.post('/api/image/show', {
-            name: name
+            name: name,
+            transpose: $('#transpose').val()
         }, function (res) {
             alert(res.msg)
         })
