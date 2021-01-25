@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片列表</title>
+    <link type="text/css" rel="stylesheet" href="/static/bootstrap/3.3.7/bootstrap.min.css">
+    <script src="/static/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/bootstrap/3.3.7/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="panel">
+    <div class="panel-body">
+        <h2 class="h2">图片列表</h2>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="transpose">图片是否旋转</label>
+                    <select id="transpose" class="form-control">
+                        <option value="0">不旋转</option>
+                        <option value="2">顺时针90°</option>
+                        <option value="3">顺时针180°</option>
+                        <option value="4">顺时针270°</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" id="image-div">
+
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $.get('/images/list', function (res) {
+            res.forEach(e => {
+                $('#image-div').append('<div class="col-sm-6 col-md-4">' +
+                    '   <div class="thumbnail">' +
+                    '       <img src="/get/image?name=' + e.name + '"/>' +
+                    '       <div class="caption">' +
+                    '          <h5>文件名: ' + e.name + '</h5>' +
+                    '          <h5>文件大小: ' + e.size + 'MB</h5>' +
+                    '          <h5>修改时间: ' + e.time + '</h5>' +
+                    '          <button class="btn btn-primary btn-xs" onclick="show(\'' + e.name + '\')">展示</button>' +
+                    '      </div>' +
+                    '   </div>' +
+                    '</div>');
+            })
+        })
+    })
+
+    function show(name) {
+        $.post('/api/image/show', {
+            name: name
+        }, function (res) {
+            alert(res.msg)
+        })
+    }
+</script>
+</body>
+</html>

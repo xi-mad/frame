@@ -14,7 +14,8 @@
     <div class="panel-body">
         <h2 class="h2">图片</h2>
 
-        <div>
+        <div class="row">
+            <div class="col-sm-6">
             <div class="form-group">
                 <label for="show-type">请选择放置类型</label>
                 <select id="show-type" class="form-control">
@@ -42,7 +43,7 @@
             <div class="form-group">
                 <button class="btn btn-success btn-sm" id="push">发布</button>
             </div>
-
+            </div>
         </div>
 
         <div class="panel-body">
@@ -70,7 +71,8 @@
                 dragMode: 'move',
                 aspectRatio: $('#show-type').val(),
                 autoCropArea: 0.8,
-                preview: '#preview'
+                preview: '#preview',
+                zoomOnWheel: false
             });
         });
 

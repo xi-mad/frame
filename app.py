@@ -1,12 +1,17 @@
 import os
+import pathlib
+import time
 import uuid
 
 from PIL import Image
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 
 from setting import mode_dev as mode
 
 is_pi = mode['pi']
+
+pathlib.Path(mode['image_path']).mkdir(exist_ok=True)
+pathlib.Path(mode['video_path']).mkdir(exist_ok=True)
 
 if is_pi:
     from waveshare_epd import epd7in5_V2
@@ -26,7 +31,6 @@ def show(img, transpose):
         epd.Clear()
         img = img.resize((epd.width, epd.height))
         epd.display(epd.getbuffer(img))
-
 
 @app.route('/')
 def index():
@@ -53,9 +57,52 @@ def api_image():
     })
 
 
-@app.route('/video')
-def video():
-    return render_template('video.html')
+@app.route('/api/image/show', methods=['POST'])
+def api_image_show():
+    img = Image.open(mode['image_path'] + '/' + request.form.get('name'))
+    show(img, 0)
+    
+    return jsonify({
+        'msg': '发布成功'
+    })
+
+
+def list_images(path):
+    files = os.listdir(path)
+    return [{'name': file,
+             'path': path + '/' + file,
+             'time': time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(os.stat(path + '/' + file).st_mtime)),
+             'size': round(os.path.getsize(path + '/' + file) / float(1024 * 1024), 2)} for file in files]
+
+
+@app.route('/images/list')
+def images_list():
+    return jsonify(list_images(path=mode['image_path']))
+
+
+@app.route('/videos/list')
+def videos_list():
+    return jsonify(list_images(path=mode['video_path']))
+
+
+@app.route('/videos')
+def videos():
+    return render_template('videos.html')
+
+
+@app.route('/images')
+def images():
+    return render_template('images.html')
+
+
+@app.route('/get/image')
+def get_image():
+    return send_file(mode['image_path'] + '/' + request.args.get('name'))
+
+
+@app.route('/get/video')
+def get_video():
+    return send_file(mode['video_path'] + '/' + request.args.get('name'))
 
 
 if __name__ == '__main__':

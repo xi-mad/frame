@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>视频列表</title>
+    <link type="text/css" rel="stylesheet" href="/static/bootstrap/3.3.7/bootstrap.min.css">
+    <script src="/static/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/bootstrap/3.3.7/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="panel">
+    <div class="panel-body">
+        <h2 class="h2">视频列表</h2>
+        <div id="image-div">
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $.get('/videos/list', function (res) {
+            res.forEach(e => {
+                $('#image-div').append('<div class="col-sm-6 col-md-4">' +
+                    '   <div class="thumbnail">' +
+                    '       <div class="caption">' +
+                    '          <h5>文件名: <a href="/get/video?name=' + e.name + '">' + e.name + '</a></h5>' +
+                    '          <h5>文件大小: ' + e.size + 'MB</h5>' +
+                    '          <h5>修改时间: ' + e.time + '</h5>' +
+                    '      </div>' +
+                    '   </div>' +
+                    '</div>');
+            })
+        })
+    })
+</script>
+</body>
+</html>
