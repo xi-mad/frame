@@ -26,8 +26,12 @@ app = Flask(__name__)
 
 
 def read_frame_as_jpeg(in_file, frame_num):
+    width = 800
+    height = 480
     (
         ffmpeg.input(in_file)
+            .filter('scale', width, height, force_original_aspect_ratio=1)
+            .filter('pad', width, height, -1, -1)
             .filter('select', 'gte(n,{})'.format(frame_num))
             .output(mode['image_path'] + '/temp.jpg', vframes=1)
             .overwrite_output()
