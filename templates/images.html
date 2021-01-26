@@ -85,21 +85,24 @@
     })
 
     function show(name) {
-        $.post('/api/image/show', {
-            name: name,
-            transpose: $('#transpose').val()
-        }, function (res) {
-            alert(res.msg)
-        })
+        if (confirm('确认展示?')) {
+            $.post('/api/image/show', {
+                name: name,
+                transpose: $('#transpose').val()
+            }, function (res) {
+                alert(res.msg)
+            })
+        }
     }
 
     function del(name) {
-        $.post('/del/image', {
-            name: name
-        }, function (res) {
-            alert(res.msg)
-            window.location.reload();
-        })
+        if (confirm('确认删除?')) {
+            $.post('/del/image', {
+                name: name
+            }, function (res) {
+                window.location.reload();
+            })
+        }
     }
 </script>
 </body>

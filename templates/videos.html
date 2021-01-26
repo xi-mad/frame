@@ -11,6 +11,21 @@
 <div class="panel">
     <div class="panel-body">
         <h2 class="h2">视频列表</h2>
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>上传图片</h3>
+                <div class="form-group">
+                    <form id="image-form" class="form-group">
+                        <label for="upload-image"></label>
+                        <input type="file" name="video" accept="video/mp4"/>
+                    </form>
+                    <div class="form-group">
+
+                        <button class="btn btn-primary btn" id="upload">上传</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="image-div">
         </div>
     </div>
@@ -25,12 +40,51 @@
                     '          <h5>文件名: <a href="/get/video?name=' + e.name + '">' + e.name + '</a></h5>' +
                     '          <h5>文件大小: ' + e.size + 'MB</h5>' +
                     '          <h5>修改时间: ' + e.time + '</h5>' +
+                    '          <button class="btn btn-primary btn-xs" onclick="show(\'' + e.name + '\')">展示</button>' +
+                    '          <button class="btn btn-danger btn-xs" onclick="del(\'' + e.name + '\')">删除</button>' +
                     '      </div>' +
                     '   </div>' +
                     '</div>');
             })
         })
+
+        $('#upload').click(function () {
+            const formData = new FormData($('#image-form')[0]);
+            $.ajax('/api/video/upload', {
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success() {
+                    alert('上传成功')
+                    window.location.reload();
+                },
+                error() {
+                },
+            });
+
+        })
     })
+
+    function show(name) {
+        if (confirm('确认展示?')) {
+            $.post('/api/video/show', {
+                name: name
+            }, function (res) {
+                alert(res.msg)
+            })
+        }
+    }
+
+    function del(name) {
+        if (confirm('确认删除?')) {
+            $.post('/del/video', {
+                name: name
+            }, function (res) {
+                window.location.reload();
+            })
+        }
+    }
 </script>
 </body>
 </html>
