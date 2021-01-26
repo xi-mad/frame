@@ -1,11 +1,11 @@
 import os
 import pathlib
+import threading
 import time
 import uuid
-import threading
-import numpy as np
 
 import ffmpeg
+import numpy as np
 from PIL import Image
 from flask import Flask, render_template, request, jsonify, send_file
 
@@ -27,14 +27,14 @@ app = Flask(__name__)
 
 
 def read_frame_as_jpeg(in_file, frame_num):
-    out, err = (
+    (
         ffmpeg.input(in_file)
             .filter('scale', 800, 480, force_original_aspect_ratio=1)
             .filter('select', 'gte(n,{})'.format(frame_num))
-            .output('pipe:', vframes=1, format='image2', vcodec='mjpeg')
+            .output(mode['image_path'] + '/temp.jpg', vframes=1)
+            .overwrite_output()
             .run(capture_stdout=True)
     )
-    return out
 
 
 def play_video(video_path):
@@ -43,10 +43,8 @@ def play_video(video_path):
     total_frames = int(ffmpeg.probe(video_path)['streams'][0]['nb_frames'])
     count = 1
     while count < total_frames:
-        out = read_frame_as_jpeg(video_path, count)
-        image_array = np.asarray(bytearray(out), dtype='uint8')
-        image_array.resize((800, -1))
-        img = Image.fromarray(image_array)
+        read_frame_as_jpeg(video_path, count)
+        img = Image.open(mode['image_path'] + '/temp.jpg')
         show(img, 0)
         time_count = 0
         
@@ -114,7 +112,7 @@ def api_video_show():
     is_playing = False
     # 等待1.5秒, 等待上个播放线程结束
     time.sleep(1.5)
-    t = threading.Thread(target=play_video, args=(video_path, ))
+    t = threading.Thread(target=play_video, args=(video_path,))
     t.start()
     t.join()
     return jsonify({
