@@ -45,7 +45,7 @@ def play_video(video_path):
     while count < total_frames:
         read_frame_as_jpeg(video_path, count)
         img = Image.open(mode['image_path'] + '/temp.jpg')
-        show(img, 0)
+        show(img, 3)
         time_count = 0
         
         while time_count < 60:
