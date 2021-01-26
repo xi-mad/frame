@@ -54,6 +54,8 @@ def play_video(video_path):
             time.sleep(1)
             time_count += 1
         count += 1
+        if count == total_frames - 5:
+            count = 1
 
 
 def show(img, transpose):
