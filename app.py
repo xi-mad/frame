@@ -29,6 +29,7 @@ app = Flask(__name__)
 def read_frame_as_jpeg(in_file, frame_num):
     out, err = (
         ffmpeg.input(in_file)
+            .filter('scale', 800, 480, force_original_aspect_ratio=1)
             .filter('select', 'gte(n,{})'.format(frame_num))
             .output('pipe:', vframes=1, format='image2', vcodec='mjpeg')
             .run(capture_stdout=True)
@@ -44,6 +45,7 @@ def play_video(video_path):
     while count < total_frames:
         out = read_frame_as_jpeg(video_path, count)
         image_array = np.asarray(bytearray(out), dtype='uint8')
+        image_array.resize((800, -1))
         img = Image.fromarray(image_array)
         show(img, 0)
         time_count = 0
