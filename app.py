@@ -5,7 +5,6 @@ import time
 import uuid
 
 import ffmpeg
-import numpy as np
 from PIL import Image
 from flask import Flask, render_template, request, jsonify, send_file
 
@@ -29,7 +28,6 @@ app = Flask(__name__)
 def read_frame_as_jpeg(in_file, frame_num):
     (
         ffmpeg.input(in_file)
-            .filter('scale', 800, 480, force_original_aspect_ratio=1)
             .filter('select', 'gte(n,{})'.format(frame_num))
             .output(mode['image_path'] + '/temp.jpg', vframes=1)
             .overwrite_output()
