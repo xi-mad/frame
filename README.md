@@ -18,6 +18,9 @@
 1. sd卡安装操作系统(我用的是Raspberry Pi OS lite版本, 在sd卡中新建一个名为SSH的文件可以默认开启ssh连接)
 2. 将sd卡装到树莓派上, 插上网线, 并连接电源开机, 在路由器后台可以看到树莓派ip
 3. ssh到树莓派, 传文件可用scp命令或其他图形化工具
+4. 安装ffmpeg, 如果下载速度慢请更换源
+    sudo apt-get update  
+    sudo apt-get install ffmpeg  
 
 ### 安装墨水屏
 1. 连接驱动板与树莓派
@@ -31,3 +34,7 @@
     sudo python3 setup.py install (python版本问题请自行查阅资料)
 5. 测试  
     python3 examples/epd_7in5_V2_test.py (选择对应屏幕的测试程序)
+    如果一切正常屏幕将显示如下效果
+    ![avatar](./docs/images/test.png)
+
+
