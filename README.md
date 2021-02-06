@@ -43,6 +43,7 @@
 1. 克隆本项目  
     **git clone git@github.com:xi-mad/frame.git**  
     **cd frame**  
+    **pip3 install -r requirement.txt**
 2. 启动项目  
     **python3 app.py**
 3. 浏览器访问, 地址为  
