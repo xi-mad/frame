@@ -8,7 +8,7 @@ import ffmpeg
 from PIL import Image
 from flask import Flask, render_template, request, jsonify, send_file
 
-from setting import mode_dev as mode
+from setting import mode_pi as mode
 
 is_pi = mode['pi']
 is_playing = mode['movie_playing']
